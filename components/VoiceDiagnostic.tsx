@@ -110,7 +110,9 @@ const VoiceDiagnostic: React.FC = () => {
             setTranscripts(prev => [...prev, `[USER]: ${message.serverContent?.inputTranscription?.text}`]);
           }
 
-          const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
+          const modelParts = message.serverContent?.modelTurn?.parts;
+          const base64Audio = (modelParts && modelParts.length > 0) ? modelParts[0].inlineData?.data : undefined;
+          
           if (base64Audio && outputAudioContextRef.current) {
             nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputAudioContextRef.current.currentTime);
             const audioBuffer = await decodeAudioData(decode(base64Audio), outputAudioContextRef.current, 24000, 1);

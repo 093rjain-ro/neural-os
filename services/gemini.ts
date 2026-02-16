@@ -101,8 +101,11 @@ export const generateSystemVisual = async (prompt: string, size: ImageSize): Pro
     }
   });
 
-  const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
-  if (part?.inlineData) {
+  const candidates = response.candidates;
+  const parts = candidates && candidates.length > 0 ? candidates[0].content?.parts : undefined;
+  const part = parts?.find(p => p.inlineData);
+  
+  if (part?.inlineData?.data) {
     const base64EncodeString: string = part.inlineData.data;
     return `data:image/png;base64,${base64EncodeString}`;
   }
@@ -124,8 +127,11 @@ export const editVisual = async (base64Image: string, prompt: string): Promise<s
     }
   });
 
-  const part = response.candidates?.[0]?.content?.parts.find(p => p.inlineData);
-  if (part?.inlineData) {
+  const candidates = response.candidates;
+  const parts = candidates && candidates.length > 0 ? candidates[0].content?.parts : undefined;
+  const part = parts?.find(p => p.inlineData);
+
+  if (part?.inlineData?.data) {
     const base64EncodeString: string = part.inlineData.data;
     return `data:image/png;base64,${base64EncodeString}`;
   }
